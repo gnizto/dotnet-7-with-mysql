@@ -2,36 +2,39 @@
 
 namespace HelloWorld
 {
+    public class Computer
+    {
+        // field example
+        // private string _motherboard;
+        public string Motherboard { get; set; }
+        public int CPUCores { get; set; }
+        public bool HasWifi { get; set; }
+        public bool HasLTE { get; set; }
+        public DateTime ReleaseDate { get; set; }
+        public decimal Price { get; set; }
+        public string VideoCard { get; set; }
+
+        public Computer()
+        {
+            if (Motherboard == null) Motherboard = "";
+            if (VideoCard == null) VideoCard = "";
+        }
+    }
     internal class Program
     {
         static void Main(string[] args)
         {
-            int[] intsToCompress = new int[] {10,15, 20, 25, 30, 12, 34};
-            int totalValue;
-
-            DateTime startTime = DateTime.Now;
-
-            totalValue = intsToCompress.Sum();
-
-            Console.WriteLine((DateTime.Now - startTime).TotalSeconds);
-            Console.WriteLine(totalValue);
-
-            startTime = DateTime.Now;
-
-            totalValue = GetSum(intsToCompress:intsToCompress);
-
-            Console.WriteLine((DateTime.Now - startTime).TotalSeconds);
-            Console.WriteLine(totalValue);
-        }
-        static private int GetSum(int[] intsToCompress)
-        {
-            int totalValue = 0;
-            for (int i = 0; i < intsToCompress.Length; i++)
+            Computer myPC = new Computer()
             {
-                totalValue += intsToCompress[i];
-            }
+                Motherboard = "Z690",
+                HasWifi = true,
+                HasLTE = false,
+                ReleaseDate = DateTime.Now,
+                Price = 943.87m,
+                VideoCard = "RTX 2060"
+            };
 
-            return totalValue;
+            Console.WriteLine(myPC.ReleaseDate);
         }
     }
 }
