@@ -1,12 +1,20 @@
 using Dapper;
 using System.Data;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
 namespace HelloWorld.Data;
 
 public class DataContextDapper
 {
-    private string _connectionString = "Server=localhost;Database=DotNetCourseDatabase;TrustServerCertificate=true;Trusted_Connection=true";
+    // private IConfiguration _config;
+    private string? _connectionString;
+    public DataContextDapper(IConfiguration config)
+    {
+        // _config = config;
+        _connectionString = config.GetConnectionString("DefaultConnection");
+
+    }
 
     // IDbConnection is from System.Data
     // SqlConnection is from Microsoft.Data.SqlClient
