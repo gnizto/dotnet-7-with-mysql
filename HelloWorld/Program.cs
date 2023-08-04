@@ -13,15 +13,8 @@ namespace HelloWorld
             IConfiguration config = new ConfigurationBuilder()
                 .AddJsonFile("appSettings.json")
                 .Build();
-            DataContextDapper dapper = new DataContextDapper(config);
-            DataContextEF entityFramework = new DataContextEF(config);
 
             string sqlCommand = "SELECT GETDATE()";
-
-            // Using Dapper
-            DateTime rightNow = dapper.LoadDataSingle<DateTime>(sqlCommand);
-
-            Console.WriteLine(rightNow);
 
             Computer myPC = new Computer()
             {
@@ -33,8 +26,11 @@ namespace HelloWorld
                 VideoCard = "RTX 2060"
             };
 
-            entityFramework.Add(myPC);
-            entityFramework.SaveChanges();
+            // region Using Dapper
+            DataContextDapper dapper = new DataContextDapper(config);
+
+            DateTime rightNow = dapper.LoadDataSingle<DateTime>(sqlCommand);
+            Console.WriteLine(rightNow);
 
             string sql = @"INSERT INTO TutorialAppSchema.Computer (
                 Motherboard,
@@ -56,9 +52,7 @@ namespace HelloWorld
 
             int result = dapper.ExecuteSqlWithRowCount(sql);
 
-            Console.WriteLine(result);
-
-            Console.WriteLine(myPC.ReleaseDate);
+            Console.WriteLine("Rows inserted: " + result);
 
             string sqlSelect = @"
             SELECT
@@ -73,7 +67,6 @@ namespace HelloWorld
 
             IEnumerable<Computer> computers = dapper.LoadData<Computer>(sqlSelect);
 
-
             foreach (Computer computer in computers)
             {
                 Console.WriteLine("'" + computer.ComputerId
@@ -84,6 +77,13 @@ namespace HelloWorld
                 + "','" + computer.Price.ToString("0.00", CultureInfo.InvariantCulture) // Using Globalization
                 + "','" + computer.VideoCard + "'");
             }
+            // endregion Using Dapper
+
+            // region Using Entity Framework 
+            DataContextEF entityFramework = new DataContextEF(config);
+
+            entityFramework.Add(myPC);
+            entityFramework.SaveChanges();
 
             IEnumerable<Computer>? computersEF = entityFramework.Computer?.ToList<Computer>();
 
@@ -100,7 +100,7 @@ namespace HelloWorld
                     + "','" + computer.VideoCard + "'");
                 }
             }
-
+            // region Using Entity Framework 
         }
     }
 }

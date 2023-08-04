@@ -7,12 +7,13 @@ namespace HelloWorld.Data;
 public class DataContextEF : DbContext
 {
     private IConfiguration _config;
+    public DbSet<Computer>? Computer { get; set; }
+    
     public DataContextEF(IConfiguration config)
     {
         _config = config;
-
     }
-    public DbSet<Computer>? Computer { get; set; }
+    
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
         if (!options.IsConfigured)
