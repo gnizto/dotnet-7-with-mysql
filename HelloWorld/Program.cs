@@ -4,6 +4,7 @@ using System.Text.Json;
 using HelloWorld.Data;
 using HelloWorld.Models;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace HelloWorld
 {
@@ -44,12 +45,13 @@ namespace HelloWorld
 
             string computersJson = File.ReadAllText("Computers.json");
 
-            JsonSerializerOptions options = new()
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase    
-            };
+            // JsonSerializerOptions options = new()
+            // {
+            //     PropertyNamingPolicy = JsonNamingPolicy.CamelCase    
+            // };
 
-            IEnumerable<Computer>? computers = JsonSerializer.Deserialize<IEnumerable<Computer>>(computersJson, options);
+            // IEnumerable<Computer>? computers = JsonSerializer.Deserialize<IEnumerable<Computer>>(computersJson, options);
+            IEnumerable<Computer>? computers = JsonConvert.DeserializeObject<IEnumerable<Computer>>(computersJson);
 
             if (computers == null) return;
             
