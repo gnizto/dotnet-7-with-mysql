@@ -5,6 +5,7 @@ using HelloWorld.Data;
 using HelloWorld.Models;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace HelloWorld
 {
@@ -45,20 +46,38 @@ namespace HelloWorld
 
             string computersJson = File.ReadAllText("Computers.json");
 
-            // JsonSerializerOptions options = new()
-            // {
-            //     PropertyNamingPolicy = JsonNamingPolicy.CamelCase    
-            // };
-
-            // IEnumerable<Computer>? computers = JsonSerializer.Deserialize<IEnumerable<Computer>>(computersJson, options);
-            IEnumerable<Computer>? computers = JsonConvert.DeserializeObject<IEnumerable<Computer>>(computersJson);
-
-            if (computers == null) return;
-            
-            foreach (Computer computer in computers)
+            JsonSerializerOptions options = new()
             {
-                Console.WriteLine(computer.Motherboard);
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase    
+            };
+
+            JsonSerializerSettings settings = new()
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+
+            IEnumerable<Computer>? computersNewtonsoft = JsonConvert
+                .DeserializeObject<IEnumerable<Computer>>(computersJson);
+
+            IEnumerable<Computer>? computersSystem = System.Text.Json.JsonSerializer
+                .Deserialize<IEnumerable<Computer>>(computersJson, options);
+            
+
+            if (computersNewtonsoft == null) return;
+            
+            foreach (Computer computer in computersNewtonsoft)
+            {
+                // Console.WriteLine(computer.Motherboard);
             }
+
+            string computersCopyNewtonsoft = JsonConvert.SerializeObject(computersNewtonsoft, settings);
+
+            File.WriteAllText("computersCopyNewtonsoft.json", computersCopyNewtonsoft);
+            
+            string computersCopySystem = System.Text.Json.JsonSerializer.Serialize(computersSystem, options);
+
+            File.WriteAllText("computersCopySystem.json", computersCopySystem);
+
         }
     }
 }
