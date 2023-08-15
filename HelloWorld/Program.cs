@@ -103,7 +103,7 @@ namespace HelloWorld
             }));
 
             IEnumerable<ComputerSnake>? computersSnake = System.Text.Json.JsonSerializer
-                .Deserialize<IEnumerable<ComputerSnake>>(computersJson);
+                .Deserialize<IEnumerable<ComputerSnake>>(computerSnake);
             
             if (computersSnake != null)
             {
